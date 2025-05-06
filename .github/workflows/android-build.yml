@@ -7,14 +7,13 @@ on:
 
 jobs:
   build:
-    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -23,11 +22,11 @@ jobs:
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
-      - name: Build APK
+      - name: Build release APK
         run: ./gradlew assembleRelease
 
-      - name: Upload APK
+      - name: Upload release APK
         uses: actions/upload-artifact@v3
         with:
-          name: mi-vida.apk
+          name: app-release.apk
           path: app/build/outputs/apk/release/app-release.apk
