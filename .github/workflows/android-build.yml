@@ -7,30 +7,27 @@ on:
 
 jobs:
   build:
+    name: Build APK
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
 
-    - name: Install Cordova CLI
-      run: npm install -g cordova
+      - name: Grant execute permission to gradlew
+        run: chmod +x ./gradlew
 
-    - name: Install dependencies
-      run: npm install
+      - name: Build APK
+        run: ./gradlew assembleRelease
 
-    - name: Build Android APK
-      run: |
-        cordova platform add android
-        cordova build android --release
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v3.1.2
-      with:
-        name: mi-vida.apk
-        path: platforms/android/app/build/outputs/apk/release/app-release.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: mi-vida.apk
+          path: app/build/outputs/apk/release/app-release.apk
